@@ -10,6 +10,7 @@ import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
 import 'react-s-alert/dist/s-alert-css-effects/genie.css';
 //import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
+import alertSound from './alert-sounds/alert-01.mp3';
 
 class App extends Component {
   constructor (props) {
@@ -86,7 +87,6 @@ class App extends Component {
           Alert.warning('Pomodoro Ends..!', {
             position: 'top',
             effect: 'stackslide',
-            beep: true,
             timeout: 10000,
           });
           //alert("Pomodoro Ends..");
@@ -96,7 +96,6 @@ class App extends Component {
         Alert.warning('Break ends.. Start Focusing!', {
           position: 'top-right',
           effect: 'genie',
-          beep: true,
           timeout: 10000,
         });
         //alert("Break ends.. Start Focusing");
@@ -126,7 +125,6 @@ class App extends Component {
         Alert.warning('Take a break!', {
           position: 'top-right',
           effect: 'bouncyflip',
-          beep: true,
           timeout: 10000,
         });
         //alert("Take a break");
@@ -176,19 +174,19 @@ class App extends Component {
         <div className="App-title"> Pomodoro Timer </div>
         
         <form onSubmit={this.setTimer.bind(this)} className="form-group box box-left">
-          <div class="form-group row">
+          <div className="form-group row">
             <label className="col-sm-5 col-form-label">Focus</label>
             
             <select ref="focusMins" className="col-sm-2"
-              onmousedown="if(this.options.length>8){this.size=8;}"  
-              onchange='this.size=0;' onblur="this.size=0;" 
+              //onmousedown="if(this.options.length>8){this.size=8;}"  
+              //onchange='this.size=0;' onblur="this.size=0;" 
               defaultValue='25'>
               {this.minuteOptions(this.props.focusRange)}
             </select>
             
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
-          <div class="form-group row">
+          <div className="form-group row">
             <label className="col-sm-5 col-form-label">Short Break</label>
             <select ref="sbreakMins" 
               className="col-sm-2"
@@ -197,7 +195,7 @@ class App extends Component {
             </select>
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
-          <div class="form-group row">
+          <div className="form-group row">
             <label className="col-sm-5 col-form-label">Long Break</label>
             <select ref="lbreakMins" 
               className="col-sm-2"
@@ -207,7 +205,7 @@ class App extends Component {
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
 
-          <div class="form-group row">
+          <div className="form-group row">
             <label className="col-sm-5 col-form-label">Number of Pomodoros</label>
             <select ref="totalRounds" 
               className="col-sm-2"
@@ -236,7 +234,7 @@ class App extends Component {
           <button onClick={this.timerSkip} className="btn btn-primary btn-lg">Skip</button>
         </div>
 
-        <Alert stack={{limit: 3}} html={true} />
+        <Alert stack={{limit: 3}} html={true} beep={alertSound} />
 
       </div>
     )

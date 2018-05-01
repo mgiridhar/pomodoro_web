@@ -12,6 +12,7 @@ class App extends Component {
       lbreakMins: '15',
       breakTime: false,
       type: 'Focus',
+      cssClass: 'box-right-focus',
       autoStart: true,
       totalRounds: 12,
       idxRound: 1,
@@ -45,6 +46,7 @@ class App extends Component {
       lbreakMins: this.refs.lbreakMins.value,
       minutes: this.refs.focusMins.value,
       type: 'Focus',
+      cssClass: 'box-right-focus',
       totalRounds: parseInt(this.refs.totalRounds.value),
       idxRound: 1,
     }, () => {
@@ -67,6 +69,7 @@ class App extends Component {
         breakTime: !this.state.breakTime,
         minutes: this.state.focusMins,
         type: 'Focus',
+        cssClass: 'box-right-focus',
         autoStart: true,
         idxRound: idx,
       }, () => {
@@ -91,6 +94,7 @@ class App extends Component {
         breakTime: !this.state.breakTime,
         minutes: mins,
         type: type,
+        cssClass: 'box-right-break',
         autoStart: true,
       }, () => {
         console.log(this.state);
@@ -107,7 +111,7 @@ class App extends Component {
       return (
         <option
           key={minute}
-          value={minute}>{minute}</option>
+          value={minute}>{parseInt(minute)}</option>
       );
     });
     //console.log(options);
@@ -136,40 +140,61 @@ class App extends Component {
     console.log("app - render");
     return (
       <div className="App">
-        <form onSubmit={this.setTimer.bind(this)} className="form-group">
-          <label>Focus</label>
-          <select ref="focusMins" defaultValue='25'>
-            {this.minuteOptions(this.props.focusRange)}
-          </select>
-          &nbsp;minutes
-          <br />
-          <label>Short Break</label>
-          <select ref="sbreakMins" defaultValue='05'>
-            {this.minuteOptions(this.props.sBreakRange)}
-          </select>
-          &nbsp;minutes
-          <br />
-          <label>Long Break</label>
-          <select ref="lbreakMins" defaultValue='15'>
-            {this.minuteOptions(this.props.lBreakRange)}
-          </select>
-          &nbsp;minutes
-          <br />
-          <label>Number of Pomodoros</label>
-          <select ref="totalRounds" defaultValue={12}>
-            {this.roundOptions(this.props.rounds)}
-          </select>
-          <br />
-          <input type="submit" value="Set / Reset Timer" className="btn btn-primary" />
+        <div className="App-title"> Pomodoro Timer </div>
+        
+        <form onSubmit={this.setTimer.bind(this)} className="form-group box box-left">
+          <div class="form-group row">
+            <label className="col-sm-5 col-form-label">Focus</label>
+            
+            <select ref="focusMins" className="col-sm-2"
+              onmousedown="if(this.options.length>8){this.size=8;}"  
+              onchange='this.size=0;' onblur="this.size=0;" 
+              defaultValue='25'>
+              {this.minuteOptions(this.props.focusRange)}
+            </select>
+            
+            <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
+          </div>
+          <div class="form-group row">
+            <label className="col-sm-5 col-form-label">Short Break</label>
+            <select ref="sbreakMins" 
+              className="col-sm-2"
+              defaultValue='05'>
+              {this.minuteOptions(this.props.sBreakRange)}
+            </select>
+            <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
+          </div>
+          <div class="form-group row">
+            <label className="col-sm-5 col-form-label">Long Break</label>
+            <select ref="lbreakMins" 
+              className="col-sm-2"
+              defaultValue='15'>
+              {this.minuteOptions(this.props.lBreakRange)}
+            </select>
+            <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
+          </div>
+
+          <div class="form-group row">
+            <label className="col-sm-5 col-form-label">Number of Pomodoros</label>
+            <select ref="totalRounds" 
+              className="col-sm-2"
+              defaultValue={12}>
+              {this.roundOptions(this.props.rounds)}
+            </select>
+          </div>
+          <div align="right" styles={{paddingRight: '5%'}}>
+            <input type="submit" value="Set / Reset Timer" className="btn btn-primary" />
+          </div>
+
         </form>
+        
 
-        <Timer mins={this.state.minutes} 
-              title={this.state.type}
-              toggle={this.toggleTimer.bind(this)} 
-              autoStart={this.state.autoStart}
-              ref={this.timerRef} />
-
-        <div>
+        <div className={"box box-right " + this.state.cssClass} >
+          <Timer mins={this.state.minutes} 
+                title={this.state.type}
+                toggle={this.toggleTimer.bind(this)} 
+                autoStart={this.state.autoStart}
+                ref={this.timerRef} />
           <button onClick={this.timerStart} className="btn btn-primary btn-lg">Start</button> &nbsp;
           <button onClick={this.timerStop} className="btn btn-primary btn-lg">Stop</button>
         </div>

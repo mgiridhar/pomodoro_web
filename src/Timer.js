@@ -78,8 +78,8 @@ class Timer extends Component {
     */
     return (
       <div key={this.props.type}>
-        <label>{this.props.title}</label>
-        <h1>{this.state.mins}:{this.state.secs}</h1>
+        <h4>{this.props.title}</h4>
+        <div className="timer">{this.state.mins}:{this.state.secs}</div>
       </div>
     )
   };

@@ -23,6 +23,7 @@ html, body, #root {
 .box {
   float: left;
   width: 49%;
+  /*width: 34.9em;*/
   height: 100%;
   padding: 3em;
   vertical-align: middle;

@@ -7,6 +7,9 @@ class Timer extends Component {
     this.state = {
       mins: this.props.mins,
       secs: '00',
+      running: false,
+      round: this.props.round,
+      rounds: this.props.rounds,
     }
   }
 
@@ -15,6 +18,9 @@ class Timer extends Component {
     this.setState({
         mins: this.props.mins,
         secs: '00',
+        running: false,
+        round: this.props.round,
+        rounds: this.props.rounds,
     });
     /*if(this.props.autoStart) {
         console.log(this.state);
@@ -32,6 +38,7 @@ class Timer extends Component {
     let secs = parseInt(this.state.secs);
     if(secs === 0 && mins === 0) {
       clearInterval(this.timer);
+      this.setState({running: false,});
       this.props.toggle();
       return;
     }
@@ -59,12 +66,24 @@ class Timer extends Component {
   }
 
   startTimer () {
-    clearInterval(this.timer)
-    this.timer = setInterval(this.tick.bind(this), 1000)
+    if(!this.state.running) {
+      clearInterval(this.timer)
+      this.setState({running: true});
+      this.timer = setInterval(this.tick.bind(this), 1000)
+    }
   }
 
   stopTimer () {
+    this.setState({running: false});
     clearInterval(this.timer);
+  }
+
+  skipTimer () {
+    this.setState({
+      mins: '00',
+      secs: '00',
+      timer: false,
+    })
   }
 
   render () {
@@ -79,6 +98,7 @@ class Timer extends Component {
     return (
       <div key={this.props.type}>
         <h4>{this.props.title}</h4>
+        <div>(Round: {this.props.round}/{this.props.rounds})</div>
         <div className="timer">{this.state.mins}:{this.state.secs}</div>
       </div>
     )

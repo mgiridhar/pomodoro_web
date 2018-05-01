@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import Timer from './Timer';
+import Alert from 'react-s-alert';
+import 'react-s-alert/dist/s-alert-default.css';
+//import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+//import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+import 'react-s-alert/dist/s-alert-css-effects/bouncyflip.css';
+//import 'react-s-alert/dist/s-alert-css-effects/flip.css';
+import 'react-s-alert/dist/s-alert-css-effects/genie.css';
+//import 'react-s-alert/dist/s-alert-css-effects/jelly.css';
+import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 
 class App extends Component {
   constructor (props) {
@@ -59,12 +68,9 @@ class App extends Component {
 
   toggleTimer() {
     if(this.state.breakTime) {
-      if(this.state.idxRound === this.state.totalRounds) {
-        alert("Pomodoro Ends..");
-        return;
-      }
 
       let idx = this.state.idxRound + 1;
+
       this.setState({
         breakTime: !this.state.breakTime,
         minutes: this.state.focusMins,
@@ -74,8 +80,26 @@ class App extends Component {
         idxRound: idx,
       }, () => {
         console.log(this.state);
-        this.forceUpdate()
-        alert("Break ends.. Start Focusing");
+        this.forceUpdate();
+        if(idx > this.state.totalRounds) {
+          this.setState({idxRound: 1});
+          Alert.warning('Pomodoro Ends..!', {
+            position: 'top',
+            effect: 'stackslide',
+            beep: true,
+            timeout: 10000,
+          });
+          //alert("Pomodoro Ends..");
+          return;
+        }
+        
+        Alert.warning('Break ends.. Start Focusing!', {
+          position: 'top-right',
+          effect: 'genie',
+          beep: true,
+          timeout: 10000,
+        });
+        //alert("Break ends.. Start Focusing");
         this.timerRef.current.startTimer();
       });
       
@@ -99,7 +123,13 @@ class App extends Component {
       }, () => {
         console.log(this.state);
         this.forceUpdate();
-        alert("Take a break");
+        Alert.warning('Take a break!', {
+          position: 'top-right',
+          effect: 'bouncyflip',
+          beep: true,
+          timeout: 10000,
+        });
+        //alert("Take a break");
         this.timerRef.current.startTimer();
       });
       
@@ -134,6 +164,9 @@ class App extends Component {
   }
   timerStop = () => {
     this.timerRef.current.stopTimer();
+  }
+  timerSkip = () => {
+    this.timerRef.current.skipTimer();
   }
 
   render () {
@@ -181,6 +214,7 @@ class App extends Component {
               defaultValue={12}>
               {this.roundOptions(this.props.rounds)}
             </select>
+            <label className="col-sm-1 col-form-label">&nbsp;rounds</label>
           </div>
           <div align="right" styles={{paddingRight: '5%'}}>
             <input type="submit" value="Set / Reset Timer" className="btn btn-primary" />
@@ -194,10 +228,15 @@ class App extends Component {
                 title={this.state.type}
                 toggle={this.toggleTimer.bind(this)} 
                 autoStart={this.state.autoStart}
+                round={this.state.idxRound}
+                rounds={this.state.totalRounds}
                 ref={this.timerRef} />
           <button onClick={this.timerStart} className="btn btn-primary btn-lg">Start</button> &nbsp;
-          <button onClick={this.timerStop} className="btn btn-primary btn-lg">Stop</button>
+          <button onClick={this.timerStop} className="btn btn-primary btn-lg">Stop</button> &nbsp;
+          <button onClick={this.timerSkip} className="btn btn-primary btn-lg">Skip</button>
         </div>
+
+        <Alert stack={{limit: 3}} html={true} />
 
       </div>
     )

@@ -16,6 +16,7 @@
     "build": "react-scripts build",
     "_test_old": "react-scripts test --env=jsdom",
     "test": "jest",
+    "lint": "eslint src/**/*.js src/**/*.mjs",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

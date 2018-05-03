@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 8.5.0
+script:
+  - "npm run lint"
+  - "npm run test"
+deploy:
+  provider: heroku
+  api_key:
+    secure: 6e4ff3c5-735d-4d9f-a62a-76397fe19152
+  app: giridhar-pomodoro
+  on:
+    repo: mgiridhar/pomodoro_web

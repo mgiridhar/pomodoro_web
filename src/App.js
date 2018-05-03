@@ -44,12 +44,14 @@ class App extends Component {
   }
 
   componentWillMount() {
-    var i;
-    for(i = 1; i < 10; i++) {
-      this.props.focusRange.push('0' + i);
-    }
-    for(i = 10; i <= 60; i++) {
-      this.props.focusRange.push('' + i);
+    if(this.props.focusRange.length === 0) {
+      var i;
+      for(i = 1; i < 10; i++) {
+        this.props.focusRange.push('0' + i);
+      }
+      for(i = 10; i <= 60; i++) {
+        this.props.focusRange.push('' + i);
+      }
     }
   }
 
@@ -69,6 +71,7 @@ class App extends Component {
       this.forceUpdate();
     });
   }
+
   setTimer(e) {
     e.preventDefault();
     this.initTimer();
@@ -145,11 +148,11 @@ class App extends Component {
     }
   }
 
-  minuteOptions(range) {
+  minuteOptions(range, type) {
     let options = range.map(minute => {
       return (
         <option
-          key={minute}
+          key={minute + type}
           value={minute}>{parseInt(minute)}</option>
       );
     });
@@ -157,27 +160,27 @@ class App extends Component {
     return options;
   }
 
-  roundOptions(range) {
+  roundOptions(range, type) {
     let options = range.map(value => {
       return (
         <option
-          key={value}
+          key={value + type}
           value={value}>{value}</option>
       )
     });
     return options;
   }
 
-  timerStart = () => {
+  timerStart() {
     this.timerRef.current.startTimer();
   }
-  timerStop = () => {
+  timerStop() {
     this.timerRef.current.stopTimer();
   }
-  timerPause = () => {
+  timerPause() {
     this.timerRef.current.pauseTimer();
   }
-  timerSkip = () => {
+  timerSkip() {
     this.timerRef.current.skipTimer();
   }
 
@@ -191,7 +194,7 @@ class App extends Component {
           <div className="form-group row">
             <label className="col-sm-5 col-form-label">Focus</label>
             
-            <select ref="focusMins" className="col-sm-2"
+            <select ref="focusMins" id="focusMins" className="col-sm-2"
               //onMouseDown={if(this.options.length>8) {this.size=8;}}
               //onchange='this.size=0;' onblur="this.size=0;"
               onChange = {(event) => {
@@ -203,14 +206,14 @@ class App extends Component {
                 }, () => this.forceUpdate());*/
               }}
               defaultValue='25'>
-              {this.minuteOptions(this.props.focusRange)}
+              {this.minuteOptions(this.props.focusRange, 'focus')}
             </select>
             
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
           <div className="form-group row">
             <label className="col-sm-5 col-form-label">Short Break</label>
-            <select ref="sbreakMins" 
+            <select ref="sbreakMins" id="sbreakMins"
               className="col-sm-2"
               /*onChange = {(event) => {
                 this.setState({
@@ -218,13 +221,13 @@ class App extends Component {
                 });
               }}*/
               defaultValue='05'>
-              {this.minuteOptions(this.props.sBreakRange)}
+              {this.minuteOptions(this.props.sBreakRange, 'sbreak')}
             </select>
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
           <div className="form-group row">
             <label className="col-sm-5 col-form-label">Long Break</label>
-            <select ref="lbreakMins" 
+            <select ref="lbreakMins" id="lbreakMins"
               className="col-sm-2"
               /*onChange = {(event) => {
                 this.setState({
@@ -232,14 +235,14 @@ class App extends Component {
                 });
               }}*/
               defaultValue='15'>
-              {this.minuteOptions(this.props.lBreakRange)}
+              {this.minuteOptions(this.props.lBreakRange, 'lbreak')}
             </select>
             <label className="col-sm-1 col-form-label">&nbsp;minutes</label>
           </div>
 
           <div className="form-group row">
             <label className="col-sm-5 col-form-label">Number of Pomodoros</label>
-            <select ref="totalRounds" 
+            <select ref="totalRounds" id="totalRounds"
               className="col-sm-2"
               /*onChange = {(event) => {
                 this.setState({
@@ -247,7 +250,7 @@ class App extends Component {
                 });
               }}*/
               defaultValue={12}>
-              {this.roundOptions(this.props.rounds)}
+              {this.roundOptions(this.props.rounds, 'pomo')}
             </select>
             <label className="col-sm-1 col-form-label">&nbsp;rounds</label>
           </div>
@@ -266,14 +269,14 @@ class App extends Component {
                 round={this.state.idxRound}
                 rounds={this.state.totalRounds}
                 ref={this.timerRef} />
-          <div className='button'>
-            <button onClick={this.timerStart} className="btn btn-primary btn-lg">Start</button> 
+          <div className='button' id='start'>
+            <button onClick={this.timerStart.bind(this)} className="btn btn-primary btn-lg">Start</button> 
           </div>
-          <div className='button'>
-            <button onClick={this.timerPause} className="btn btn-primary btn-lg">Pause</button>
+          <div className='button' id='pause'>
+            <button onClick={this.timerPause.bind(this)} className="btn btn-primary btn-lg">Pause</button>
           </div>
-          <div className='button'>
-            <button onClick={this.timerSkip} className="btn btn-primary btn-lg">Skip</button>
+          <div className='button' id='skip'>
+            <button onClick={this.timerSkip.bind(this)} className="btn btn-primary btn-lg">Skip</button>
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import Timer from './Timer';
+import App from '../App';
+import Timer from '../Timer';
 import { shallow, mount, render } from 'enzyme';
 import sinon from 'sinon';
 

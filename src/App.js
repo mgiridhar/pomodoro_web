@@ -12,6 +12,11 @@ import 'react-s-alert/dist/s-alert-css-effects/genie.css';
 import 'react-s-alert/dist/s-alert-css-effects/stackslide.css';
 import alertSound from './alert-sounds/alert-01.mp3';
 
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+
 class App extends Component {
   constructor (props) {
     super(props);
@@ -48,13 +53,13 @@ class App extends Component {
     }
   }
 
-  setTimer(e) {
-    e.preventDefault();
+  initTimer = () => {
     this.setState({
       focusMins: this.refs.focusMins.value,
       sbreakMins: this.refs.sbreakMins.value,
       lbreakMins: this.refs.lbreakMins.value,
       minutes: this.refs.focusMins.value,
+      breakTime: false,
       type: 'Focus',
       cssClass: 'box-right-focus',
       totalRounds: parseInt(this.refs.totalRounds.value),
@@ -63,6 +68,10 @@ class App extends Component {
       this.timerRef.current.stopTimer();
       this.forceUpdate();
     });
+  }
+  setTimer(e) {
+    e.preventDefault();
+    this.initTimer();
     //console.log(this.refs.focusMins.value);
     //console.log(this.state);
   }
@@ -71,6 +80,16 @@ class App extends Component {
     if(this.state.breakTime) {
 
       let idx = this.state.idxRound + 1;
+      if(idx > this.state.totalRounds) {
+        this.initTimer();
+        Alert.warning('Pomodoro Ends..!', {
+          position: 'top',
+          effect: 'stackslide',
+          timeout: 10000,
+        });
+        //alert("Pomodoro Ends..");
+        return;
+      }
 
       this.setState({
         breakTime: !this.state.breakTime,
@@ -80,18 +99,8 @@ class App extends Component {
         autoStart: true,
         idxRound: idx,
       }, () => {
-        console.log(this.state);
+        //console.log(this.state);
         this.forceUpdate();
-        if(idx > this.state.totalRounds) {
-          this.setState({idxRound: 1});
-          Alert.warning('Pomodoro Ends..!', {
-            position: 'top',
-            effect: 'stackslide',
-            timeout: 10000,
-          });
-          //alert("Pomodoro Ends..");
-          return;
-        }
         
         Alert.warning('Break ends.. Start Focusing!', {
           position: 'top-right',
@@ -99,28 +108,30 @@ class App extends Component {
           timeout: 10000,
         });
         //alert("Break ends.. Start Focusing");
-        this.timerRef.current.startTimer();
       });
+      this.timerRef.current.startTimer();
       
     }
     else {
-      var mins, type;
+      var mins, type, cssClass;
       if ( (this.state.idxRound > 1) && (this.state.idxRound % 4 === 0)) {
-        mins = this.state.lbreakMins;
+        mins = this.refs.lbreakMins.value; //this.state.lbreakMins;
         type = 'Long Break';
+        cssClass = 'box-right-lbreak';
       } else {
-        mins = this.state.sbreakMins;
+        mins = this.refs.sbreakMins.value; //this.state.sbreakMins;
         type = 'Short Break';
+        cssClass = 'box-right-sbreak';
       }
-
+      //console.log(cssClass);
       this.setState({
         breakTime: !this.state.breakTime,
         minutes: mins,
         type: type,
-        cssClass: 'box-right-break',
+        cssClass: cssClass,
         autoStart: true,
       }, () => {
-        console.log(this.state);
+        //console.log(this.state);
         this.forceUpdate();
         Alert.warning('Take a break!', {
           position: 'top-right',
@@ -128,9 +139,9 @@ class App extends Component {
           timeout: 10000,
         });
         //alert("Take a break");
-        this.timerRef.current.startTimer();
+        
       });
-      
+      this.timerRef.current.startTimer();
     }
   }
 
@@ -163,12 +174,15 @@ class App extends Component {
   timerStop = () => {
     this.timerRef.current.stopTimer();
   }
+  timerPause = () => {
+    this.timerRef.current.pauseTimer();
+  }
   timerSkip = () => {
     this.timerRef.current.skipTimer();
   }
 
   render () {
-    console.log("app - render");
+    //console.log("app - render");
     return (
       <div className="App">
         <div className="App-title"> Pomodoro Timer </div>
@@ -178,8 +192,16 @@ class App extends Component {
             <label className="col-sm-5 col-form-label">Focus</label>
             
             <select ref="focusMins" className="col-sm-2"
-              //onmousedown="if(this.options.length>8){this.size=8;}"  
-              //onchange='this.size=0;' onblur="this.size=0;" 
+              //onMouseDown={if(this.options.length>8) {this.size=8;}}
+              //onchange='this.size=0;' onblur="this.size=0;"
+              onChange = {(event) => {
+                //console.log(this.refs.focusMins.value);
+                this.initTimer();
+                /*this.setState({
+                  focusMins: event.target.value,
+                  minutes: event.target.value,
+                }, () => this.forceUpdate());*/
+              }}
               defaultValue='25'>
               {this.minuteOptions(this.props.focusRange)}
             </select>
@@ -190,6 +212,11 @@ class App extends Component {
             <label className="col-sm-5 col-form-label">Short Break</label>
             <select ref="sbreakMins" 
               className="col-sm-2"
+              /*onChange = {(event) => {
+                this.setState({
+                  sbreakMins: event.target.value,
+                });
+              }}*/
               defaultValue='05'>
               {this.minuteOptions(this.props.sBreakRange)}
             </select>
@@ -199,6 +226,11 @@ class App extends Component {
             <label className="col-sm-5 col-form-label">Long Break</label>
             <select ref="lbreakMins" 
               className="col-sm-2"
+              /*onChange = {(event) => {
+                this.setState({
+                  lbreakMins: event.target.value,
+                });
+              }}*/
               defaultValue='15'>
               {this.minuteOptions(this.props.lBreakRange)}
             </select>
@@ -209,6 +241,11 @@ class App extends Component {
             <label className="col-sm-5 col-form-label">Number of Pomodoros</label>
             <select ref="totalRounds" 
               className="col-sm-2"
+              /*onChange = {(event) => {
+                this.setState({
+                  totalRounds: event.target.value,
+                });
+              }}*/
               defaultValue={12}>
               {this.roundOptions(this.props.rounds)}
             </select>
@@ -229,9 +266,15 @@ class App extends Component {
                 round={this.state.idxRound}
                 rounds={this.state.totalRounds}
                 ref={this.timerRef} />
-          <button onClick={this.timerStart} className="btn btn-primary btn-lg">Start</button> &nbsp;
-          <button onClick={this.timerStop} className="btn btn-primary btn-lg">Stop</button> &nbsp;
-          <button onClick={this.timerSkip} className="btn btn-primary btn-lg">Skip</button>
+          <div className='button'>
+            <button onClick={this.timerStart} className="btn btn-primary btn-lg">Start</button> 
+          </div>
+          <div className='button'>
+            <button onClick={this.timerPause} className="btn btn-primary btn-lg">Pause</button>
+          </div>
+          <div className='button'>
+            <button onClick={this.timerSkip} className="btn btn-primary btn-lg">Skip</button>
+          </div>
         </div>
 
         <Alert stack={{limit: 3}} html={true} beep={alertSound} />

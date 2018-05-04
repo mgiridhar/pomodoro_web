@@ -22,7 +22,6 @@ it('correct initialization for display', () => {
     expect(wrapper.state().timerState).toBe('ready');
     expect(wrapper.find('.timer').render().text()).toBe(mins+':00');
 
-    clock.restore();
     wrapper.unmount();
 });
 

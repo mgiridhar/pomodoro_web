@@ -31,6 +31,7 @@ class App extends Component {
       autoStart: true,
       totalRounds: 12,
       idxRound: 1,
+      running: false,
     }
     this.timerRef = React.createRef();
     //console.log("started");
@@ -66,8 +67,10 @@ class App extends Component {
       cssClass: 'box-right-focus',
       totalRounds: parseInt(this.refs.totalRounds.value),
       idxRound: 1,
+      running: false,
     }, () => {
-      this.timerRef.current.stopTimer();
+      this.timerStop.bind(this);
+      //this.timerRef.current.stopTimer();
       this.forceUpdate();
     });
   }
@@ -264,7 +267,7 @@ class App extends Component {
         <div className={"box box-right " + this.state.cssClass} >
           <Timer mins={this.state.minutes} 
                 title={this.state.type}
-                toggle={this.toggleTimer.bind(this)} 
+                toggle={this.toggleTimer.bind(this)}
                 autoStart={this.state.autoStart}
                 round={this.state.idxRound}
                 rounds={this.state.totalRounds}

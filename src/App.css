@@ -27,6 +27,8 @@ html, body, #root {
   height: 100%;
   padding: 5%;
   vertical-align: middle;
+  display: inline-block;
+  overflow: auto;
   color: whitesmoke;
 }
 

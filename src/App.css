@@ -100,3 +100,9 @@ html, body, #root {
   padding: 1%;
   display: inline-block;
 }
+
+.note {
+  font-size: 80%;
+  font-weight: lighter;
+  font-style: italic;
+}

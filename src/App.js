@@ -263,11 +263,9 @@ class App extends Component {
             <label className="col-sm-5 col-form-label">Number of Pomodoros</label>
             <select ref="totalRounds" id="totalRounds"
               className="col-sm-2"
-              /*onChange = {(event) => {
-                this.setState({
-                  totalRounds: event.target.value,
-                });
-              }}*/
+              onChange = {(event) => {
+                this.initTimer();
+              }}
               defaultValue={12}>
               {this.roundOptions(this.props.rounds, 'pomo')}
             </select>
@@ -276,7 +274,7 @@ class App extends Component {
           <div align="right" styles={{paddingRight: '5%'}}>
             <input type="submit" value="Set / Reset Timer" className="btn btn-primary" />
           </div>
-
+          <div className='note'> Note: Changing options focus mins or number of pomodoros will reset the timer. </div>
         </form>
         
 

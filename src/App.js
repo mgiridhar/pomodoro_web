@@ -274,7 +274,7 @@ class App extends Component {
           <div align="right" styles={{paddingRight: '5%'}}>
             <input type="submit" value="Set / Reset Timer" className="btn btn-primary" />
           </div>
-          <div className='note'> Note: Changing options focus mins or number of pomodoros will reset the timer. </div>
+          <div className='note'> Note: Changing options focus minutes or number of pomodoros will reset the timer. </div>
         </form>
         
 

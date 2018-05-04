@@ -8,15 +8,50 @@ html, body, #root {
   width: 100%;
   font-size: large;
   height: 100%;
-  background: #3e4444;
+  background: #343a40; /* #3e4444;*/
+}
+
+.header {
+  width: 100%;
+}
+
+.header-box {
+  display: inline-block;
+  height: 100%;
+  float: left;
+}
+
+.github-svg {
+  width: 10%;
+}
+
+.github {
+  float: right;
+  /*vertical-align: middle;
+  width: 10%;
+  padding-top: 2.5%;
+  padding-left: 4%;
+  padding-bottom: 1%;
+  padding-right: 1.5%;
+  margin: 5%;*/
+}
+
+.github-text {
+  font-size: smaller;
+  color: whitesmoke;
+}
+
+.github-text:hover {
+  color: cornflowerblue;
 }
 
 .App-title {
   font-size: 200%;
+  width: 100%;
   text-align: center;
   font-weight: bolder;
   color: whitesmoke;
-  background: #3e4444;
+  background: #343a40; /* #3e4444;*/
   padding: 1%;
 }
 
